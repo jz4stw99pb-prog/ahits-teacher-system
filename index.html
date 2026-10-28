@@ -124,5 +124,29 @@ function exportCSV(){const rows=[['Суралцагчийн код','Огноо'
 render();
 initConfigFields();
 (function bootAhits(){if(!ensureClient())return;ahitsSupabase.auth.onAuthStateChange((event,session)=>{if(session){ahitsSession=session;onAhitsSignedIn(session)}else{ahitsSession=null;document.getElementById('accountArea').style.display='none';showAuth()}});ahitsSupabase.auth.getSession().then(({data,error})=>{if(error){showAuth();authMessage(error.message,true)}else if(data.session)onAhitsSignedIn(data.session);else showAuth()})})();
+ 
+async function ahitsGenerateAI(task, data) {
+ if (!ahitsSupabase) {
+    throw new Error("Supabase холболт олдсонгүй.");
+  }
+
+  const { data: response, error } =
+    await ahitsSupabase.functions.invoke("ahits-ai", {
+      body: { task, data }
+    });
+
+  if (error) {
+    throw new Error("AI үйлчилгээтэй холбогдож чадсангүй.");
+  }
+
+  if (!response || !response.success) {
+    throw new Error(
+      response?.error || "AI хариу авахад алдаа гарлаа."
+    );
+  }
+
+  return response.result;
+}
+
 </script>
 </body></html>
