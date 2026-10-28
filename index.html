@@ -63,7 +63,7 @@ select,input,textarea{width:100%;background:#0b1525;border:1px solid #2a3a52;col
 </section>
 <section class="grid bottom-grid">
  <div class="card"><div class="card-head"><div><div class="card-title">СҮҮЛИЙН АЖИГЛАЛТУУД</div><div class="hint">Тэмдэглэлийн жишиг жагсаалт</div></div><button class="btn" onclick="exportCSV()">CSV татах</button></div><div class="activity" id="activity"></div><div class="empty" id="empty">Одоогоор ажиглалт алга.</div></div>
- <div class="card"><div class="card-head"><div><div class="card-title">AI ТУСЛАХЫН ЖИШИГ САНАЛ</div><span class="badge">Демо</span></div></div><div class="note"><strong>Ажиглалтаас дараагийн алхам руу</strong><br><br>Зурагт үзүүлэнтэй даалгаварт оролцоо өндөр байвал дараагийн хичээлд зураг, богино заавар, сонголттой даалгаврыг туршиж болно. Энэ нь жишиг санал бөгөөд бодит AI холболт биш.<br><br><span style="color:#91a5bf">Багш бүх саналыг шалгаж, эцсийн шийдвэрийг гаргана.</span></div><div style="margin-top:14px"><button class="btn" style="width:100%" onclick="alert('Энэ демо хувилбарт AI үйлчилгээ холбогдоогүй. AI-г сервер талын API-аар дараа нь холбоно.')">AI нэгтгэл (демо)</button></div></div>
+ <div class="card"><div class="card-head"><div><div class="card-title">AI ТУСЛАХЫН ЖИШИГ САНАЛ</div><span class="badge">Демо</span></div></div><div class="note"><strong>Ажиглалтаас дараагийн алхам руу</strong><br><br>Зурагт үзүүлэнтэй даалгаварт оролцоо өндөр байвал дараагийн хичээлд зураг, богино заавар, сонголттой даалгаврыг туршиж болно. Энэ нь жишиг санал бөгөөд бодит AI холболт биш.<br><br><span style="color:#91a5bf">Багш бүх саналыг шалгаж, эцсийн шийдвэрийг гаргана.</span></div><div style="margin-top:14px"><button class="btn" style="width:100%" onclick="runAhitsAIReport()">AI нэгтгэл (демо)</button></div></div>
 </section>
 <div class="footer"><span>АХИЦ • Үнэгүй туршилтын загвар</span><span>Жишиг мэдээлэл ашигласан • Хүүхдийн бодит мэдээлэл бүү оруул</span></div>
 </div>
@@ -77,7 +77,7 @@ select,input,textarea{width:100%;background:#0b1525;border:1px solid #2a3a52;col
 <div><label>Дэмжлэг</label><select name="support"><option>Дэмжлэг шаардсангүй</option><option>Зурагт үзүүлэн</option><option>Аман сануулга</option><option>Алхамчилсан заавар</option><option>Хосоор ажиллуулах</option></select></div>
 <div class="full"><label>Бодит ажиглалт</label><textarea name="note" placeholder="Зөвхөн ажигласан үйлдэл, баримтыг бичнэ үү." required></textarea></div>
 <div class="full"><label>Дараагийн алхам</label><textarea name="next" placeholder="Дараагийн хичээлд турших дэмжлэг..."></textarea></div>
-</div><div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px"><button type="button" class="btn" onclick="closeModal()">Болих</button><button type="submit" class="btn primary">Хадгалах</button></div></form>
+</div><div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px"><button type="button" class="btn" onclick="closeModal()">Болих</button><button type="submit" class="btn primary">Хадгалах</button></div></form
 </div></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -146,6 +146,18 @@ async function ahitsGenerateAI(task, data) {
   }
 
   return response.result;
+}
+  async function runAhitsAIReport() {
+  try {
+    const result = await ahitsGenerateAI("report", {
+      className: document.getElementById("classSelect")?.value || "Сонгосон анги",
+      observations: records
+    });
+
+    alert(result);
+  } catch (error) {
+    alert(error.message || "AI тайлан гаргахад алдаа гарлаа.");
+  }
 }
 
 </script>
